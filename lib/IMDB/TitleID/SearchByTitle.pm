@@ -9,6 +9,9 @@ use 5.010001;
 use strict;
 use warnings;
 use Log::ger;
+use LWP::Simple;
+
+my $log_dump = Log::ger->get_logger(category => "dump");
 
 our %SPEC;
 
@@ -33,12 +36,12 @@ sub search_imdb_title_id_by_title {
     #my $url = "https://www.bing.com/search?q=imdb+".URI::Escape::uri_escape($q)); # returns "No result"
     #my $url = "https://duckduckgo.com/?q=imdb+".URI::Escape::uri_escape($q); # doesn't contain any result, only script sections including boxes
     #my $url = "https://www.google.com/search?q=imdb+".URI::Escape::uri_escape($q); # cannot even connect
-    my $url = "https://id.search.yahoo.com/search?p=imdb+".URI::Escape::uri_escape($q); # thank god this still works as of 2019-12-23
+    my $url = "https://id.search.yahoo.com/search?p=imdb+".URI::Escape::uri_escape($title); # thank god this still works as of 2019-12-23
     log_trace "IMDB search URL: $url";
     my $html = get $url;
-    log_trace "Got search result: $html";
+    $log_dump->trace($html);
     $html =~ m!imdb\.com/title/(.+?)/!
-        or return [500, "Cannot get IMDB title ID from web search 'imdb $q'"];
+        or return [500, "Cannot get IMDB title ID from web search 'imdb $title'"];
     my $tt = $1;
 
     [200, "OK", $tt];
