@@ -17,7 +17,7 @@ our %SPEC;
 
 $SPEC{search_imdb_title_id_by_title} = {
     v => 1.1,
-    summary => 'Extract information from an IMDB title page',
+    summary => 'Try to find IMDB title ID for a movie title',
     args => {
         title => {
             schema => 'str*',
